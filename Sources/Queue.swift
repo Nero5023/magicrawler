@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Dispatch
 
 protocol QueueType {
   associatedtype Element
@@ -18,36 +19,52 @@ protocol QueueType {
   func peek() -> Element?
 }
 
-struct Queue<T>: QueueType{
+class Queue<T>: QueueType{
   typealias Element = T
   
   private var left: [T]
   private var right: [T]
   
+  private let concurrentQueue: DispatchQueue
+  
   init() {
     left = []
     right = []
+    concurrentQueue = DispatchQueue(label: "com.magicrawler.Queue.concurrentQueue", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
   }
   
-  mutating func enqueue(_ newElement: T) {
-    right.append(newElement)
-  }
-  
-  mutating func dequeue() -> T? {
-    guard !(left.isEmpty && right.isEmpty) else { return nil }
-    if left.isEmpty {
-      left = right.reversed()
-      right.removeAll(keepingCapacity: true)
+  func enqueue(_ newElement: T) {
+    concurrentQueue.async(group: nil, qos: .userInitiated, flags: .barrier) {
+      self.right.append(newElement)
     }
-    return left.removeLast()
+  }
+  
+  func dequeue() -> T? {
+    var firstElement: T?
+    concurrentQueue.sync {
+      if (left.isEmpty && right.isEmpty) {
+        firstElement = nil
+      }else {
+        if left.isEmpty {
+          left = right.reversed()
+          right.removeAll(keepingCapacity: true)
+        }
+        firstElement = left.removeLast()
+      }
+    }
+    return firstElement
   }
   
   func peek() -> T? {
-    if !left.isEmpty {
-      return left.last
-    }else {
-      return right.first
+    var element:T? = nil
+    concurrentQueue.sync {
+      if !left.isEmpty {
+        element = left.last
+      }else {
+        element = right.first
+      }
     }
+    return element
   }
   
 }
