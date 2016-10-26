@@ -1,6 +1,6 @@
 import XCTest
-@testable import magicrawlerTests
+@testable import MagicrawlerTests
 
 XCTMain([
-     testCase(magicrawlerTests.allTests),
+     testCase(MagicrawlerTests.allTests),
 ])
