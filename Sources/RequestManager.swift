@@ -8,18 +8,6 @@
 
 import Foundation
 
-/// Types adopting the RequestConvertible protocol can be uesed to generate url request
-protocol RequestConvertible {
-  // return the url request
-  var getURLRequest: URLRequest { get }
-}
-
-extension URLRequest: RequestConvertible {
-  public var getURLRequest: URLRequest {
-    return self
-  }
-}
-
 
 /// The Request Manager Delegate
 protocol RequestManagerDelegate: class {
