@@ -54,8 +54,14 @@ class Magicrawler{
     /**
      add a url which waiting to be request
     */
-    final public func appendURL(_ url:URLConvertible){
-        self.requestManager.append()
+    final public func appendURL(_ url: URLConvertible){
+      do {
+        let request = try URLRequest(url: url, method: .get, headers: nil)
+        self.requestManager.append(request)
+      }catch let error {
+        print(error)
+      }
+      
     }
     
     /**

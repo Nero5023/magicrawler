@@ -18,6 +18,7 @@ public protocol URLConvertible {
   func asURL() throws -> URL
 }
 
+
 extension URL: URLConvertible {
   public func asURL() throws -> URL {
     return self
@@ -25,6 +26,13 @@ extension URL: URLConvertible {
 }
 
 extension String: URLConvertible {
+  /**
+    Return a URL if the url is vaild 
+    
+    - throws: a 'MCError.invalidURL' if self is not a valid URL string
+   
+    - returns: A URL or throws a 'MCError'
+  */
   public func asURL() throws -> URL {
     guard let url = URL(string: self) else {
       throw MCError.invalidURL(url: self)
