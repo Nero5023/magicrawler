@@ -19,7 +19,7 @@ extension URLRequest: RequestConvertible {
 }
 
 protocol RequestManagerDelegate {
-  func willSendRequest(request: URLRequest)URLRequest
+  func willSendRequest(request: URLRequest)
 }
 
 class RequestManager {
