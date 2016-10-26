@@ -27,10 +27,15 @@ class Queue<T>: QueueType{
   
   private let concurrentQueue: DispatchQueue
   
-  init() {
-    left = []
+  
+  init(elements: [T]) {
+    left = elements.reversed()
     right = []
     concurrentQueue = DispatchQueue(label: "com.magicrawler.Queue.concurrentQueue", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+  }
+  
+  convenience init() {
+    self.init(elements: [])
   }
   
   func enqueue(_ newElement: T) {
