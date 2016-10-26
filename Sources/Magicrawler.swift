@@ -21,7 +21,7 @@ class Magicrawler{
     init(name: String) {
         self.name = name
         self.requestManager = RequestManager()
-
+        self.requestManager.delegate = self
     }
     
     /**
@@ -40,7 +40,9 @@ class Magicrawler{
      */
     func sendRequest(request: URLRequest){
         let session = URLSession.shared
-        session.dataTask(with: request, completionHandler: self.parse)
+        let task = session.dataTask(with: request, completionHandler: self.parse)
+        task.resume()
+        print("send request: \(request)")
     }
     
     /**
