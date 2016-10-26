@@ -14,12 +14,14 @@ class Magicrawler{
     //MARK: Properties
     private let name: String
     private let requestManager: RequestManager
+
     
     //MARK: functions
     
     init(name: String) {
         self.name = name
         self.requestManager = RequestManager()
+
     }
     
     /**
@@ -34,15 +36,35 @@ class Magicrawler{
     
     /**
      send a URLrequest
-     - parameter request: a URL request which will be send
+     - parameter request: a URL request which will be sent
      */
     func sendRequest(request: URLRequest){
-        
+        let session = URLSession.shared
+        session.dataTask(with: request, completionHandler: self.parse)
     }
     
     /**
-     
+     add a request which waiting to be sent
      */
+    final public func appendRequest(_ request:RequestConvertible){
+        self.requestManager.append(request)
+    }
+    
+    
+    /**
+     add a url which waiting to be request
+    */
+    final public func appendURL(_ url:URLConvertible){
+        self.requestManager.append()
+    }
+    
+    /**
+     this func should be override to parse you own response
+    */
+    public func parse(data: Data?, reponse: URLResponse?, error: Error?){
+        
+    }
+    
     
     
 }
