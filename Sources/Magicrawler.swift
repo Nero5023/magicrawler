@@ -72,9 +72,7 @@ class Magicrawler{
     public func parse(data: Data?, reponse: URLResponse?, error: Error?){
         
     }
-    
-    
-    
+  
 }
 
 

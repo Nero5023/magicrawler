@@ -27,7 +27,6 @@ class RequestManager {
   init() {
     concurrentQueue = DispatchQueue(label: "com.magicrawler.RequestManager.concurrentQueue", qos: .userInitiated, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     requestQueue = Queue()
-    checkRequestQueue()
   }
   
   /**
@@ -35,9 +34,9 @@ class RequestManager {
      if has request notify the delegate
    */
   fileprivate func checkRequestQueue() {
-    concurrentQueue.async {
-      while true {
-        if let request = self.requestQueue.dequeue() {
+    concurrentQueue.async(group: nil, qos: .userInitiated, flags: .barrier) {
+      self.concurrentQueue.async {
+        while let request = self.requestQueue.dequeue() {
           self.delegate?.willSendRequest(request: request.getURLRequest)
         }
       }
@@ -52,6 +51,7 @@ class RequestManager {
    */
   func append(_ newRequest: RequestConvertible) {
     self.requestQueue.enqueue(newRequest)
+    self.checkRequestQueue()
   }
   
   /**
@@ -63,6 +63,7 @@ class RequestManager {
     for request in newRequests {
       self.requestQueue.enqueue(request)
     }
+    self.checkRequestQueue()
   }
   
 }
