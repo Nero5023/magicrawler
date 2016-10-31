@@ -16,9 +16,12 @@ class MagicrawlerTests: XCTestCase {
         }
       }
       
-      let runloop = RunLoop.current
-      runloop.add(Port(), forMode: .commonModes)
-      runloop.run()
+//      let runloop = RunLoop.current
+//      runloop.add(Port(), forMode: .commonModes)
+//      runloop.run()
+      let runloopmain = RunLoop.main
+      runloopmain.run()
+      print("hello world")
       
     }
   
