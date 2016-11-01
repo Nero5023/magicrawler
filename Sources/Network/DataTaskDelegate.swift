@@ -33,6 +33,9 @@ class DataTaskDelegate: NSObject, URLSessionDataDelegate {
 //  Asks the delegate whether the data (or upload) task should store the response in the cache.
   func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
     print("dataTaskDidReceiveData")
+    print(Thread.current)
+//    print(String(data: data, encoding: .utf8))
+    print(data)
     if let dataTaskDidReceiveData = dataTaskDidReceiveData {
       dataTaskDidReceiveData(session, dataTask, data)
     }
@@ -41,6 +44,7 @@ class DataTaskDelegate: NSObject, URLSessionDataDelegate {
 //  Asks the delegate whether the data (or upload) task should store the response in the cache.
   func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, willCacheResponse proposedResponse: CachedURLResponse, completionHandler: @escaping (CachedURLResponse?) -> Void) {
     print("dataTaskWillCacheResponse")
+    print(Thread.current)
     var cachedReponse: CachedURLResponse? = proposedResponse
     if let dataTaskWillCacheResponse = dataTaskWillCacheResponse {
       cachedReponse = dataTaskWillCacheResponse(session, dataTask, proposedResponse)

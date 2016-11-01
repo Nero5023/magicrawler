@@ -21,7 +21,8 @@ open class NetworkManger {
   }
   
   func request(_ urlRequest: RequestConvertible) {
-    self.session.dataTask(with: try! urlRequest.asURLRequest())
+    let task = self.session.dataTask(with: try! urlRequest.asURLRequest())
+    task.resume()
   }
   
 }
