@@ -17,11 +17,11 @@ open class NetworkManger {
 //  let delegate: 
   
   init() {
-//    self.session = URLSession(configuration: .default, delegate: nil, delegateQueue: nil)
-    self.session = URLSession.shared
-    let task = session.dataTask(with: try! "".asURL())
-    task.del
+    self.session = URLSession(configuration: .default, delegate: DataTaskDelegate(), delegateQueue: nil)
   }
   
+  func request(_ urlRequest: RequestConvertible) {
+    self.session.dataTask(with: try! urlRequest.asURLRequest())
+  }
   
 }
