@@ -45,11 +45,11 @@ extension String: URLConvertible {
 /// Types adopting the RequestConvertible protocol can be uesed to generate url request
 public protocol RequestConvertible {
   // return the url request
-  var getURLRequest: URLRequest { get }
+  func asURLRequest() throws -> URLRequest
 }
 
 extension URLRequest: RequestConvertible {
-  public var getURLRequest: URLRequest {
+  public func asURLRequest() throws -> URLRequest {
     return self
   }
 }

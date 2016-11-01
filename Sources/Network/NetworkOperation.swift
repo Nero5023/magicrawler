@@ -50,7 +50,7 @@ class NetworkOperation: Operation {
     self.isFinished = false
     let mainQueue = OperationQueue.main
     mainQueue.addOperation {
-      URLSession(configuration: <#T##URLSessionConfiguration#>, delegate: <#T##URLSessionDelegate?#>, delegateQueue: <#T##OperationQueue?#>)
+//      URLSession(configuration: <#T##URLSessionConfiguration#>, delegate: <#T##URLSessionDelegate?#>, delegateQueue: <#T##OperationQueue?#>)
     }
   }
 }

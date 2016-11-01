@@ -37,7 +37,7 @@ class RequestManager {
     concurrentQueue.async(group: nil, qos: .userInitiated, flags: .barrier) {
       self.concurrentQueue.async {
         while let request = self.requestQueue.dequeue() {
-          self.delegate?.willSendRequest(request: request.getURLRequest)
+          self.delegate?.willSendRequest(request: try! request.asURLRequest())
         }
       }
     }
