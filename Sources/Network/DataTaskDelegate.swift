@@ -54,3 +54,10 @@ class DataTaskDelegate: NSObject, URLSessionDataDelegate {
   
   
 }
+
+class SessionDelegate: NSObject, URLSessionTaskDelegate {
+  func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+    
+  }
+}
+
