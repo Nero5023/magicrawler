@@ -10,10 +10,10 @@ import Foundation
 
 class NetworkOperation: Operation {
   
-  let request: RequestConvertible
+  let task: URLSessionTask
   
-  init(_ request: RequestConvertible) {
-    self.request = request
+  init(_ task: URLSessionTask) {
+    self.task = task
   }
   
   private var _executing : Bool = false
@@ -48,9 +48,13 @@ class NetworkOperation: Operation {
   override func start() {
     self.isExecuting = true
     self.isFinished = false
-    let mainQueue = OperationQueue.main
-    mainQueue.addOperation {
-//      URLSession(configuration: <#T##URLSessionConfiguration#>, delegate: <#T##URLSessionDelegate?#>, delegateQueue: <#T##OperationQueue?#>)
-    }
+    self.task.resume()
+  }
+  
+  override func cancel() {
+    super.cancel()
+    self.task.cancel()
+    self.isFinished = true
+    self.isExecuting = false
   }
 }
