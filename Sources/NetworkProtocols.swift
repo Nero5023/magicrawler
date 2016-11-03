@@ -11,6 +11,8 @@ import Foundation
 // MARK: MCError
 enum MCError: Error {
   case invalidURL(url: URLConvertible)
+  
+  case jsonSerializationFailed
 }
 
 // MARK: URLConvertible

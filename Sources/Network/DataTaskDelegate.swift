@@ -9,11 +9,15 @@
 import Foundation
 
 class DataTaskDelegate: NSObject, URLSessionDataDelegate {
-  
+  var data = Data()
   
   var dataTaskDidReceiveResponse: ((URLSession, URLSessionDataTask, URLResponse) -> URLSession.ResponseDisposition)?
   var dataTaskDidReceiveData: ((URLSession, URLSessionDataTask, Data) -> Void)?
   var dataTaskWillCacheResponse: ((URLSession, URLSessionDataTask, CachedURLResponse) -> CachedURLResponse?)?
+  
+  //
+  var reponseData: ((Data?, HTTPURLResponse?, Error?)->())?
+  var reponseJSON: ((Any?, HTTPURLResponse?, Error?)->())?
   
   // Tells the delegate that the data task received the initial reply (headers) from the server.
   func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
@@ -33,6 +37,7 @@ class DataTaskDelegate: NSObject, URLSessionDataDelegate {
 //  Asks the delegate whether the data (or upload) task should store the response in the cache.
   func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
     print("dataTaskDidReceiveData")
+    self.data.append(data)
     print(Thread.current)
 //    print(String(data: data, encoding: .utf8))
     print(data)
@@ -55,9 +60,26 @@ class DataTaskDelegate: NSObject, URLSessionDataDelegate {
   
 }
 
-class SessionDelegate: NSObject, URLSessionTaskDelegate {
+extension DataTaskDelegate: URLSessionTaskDelegate {
   func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-    
+    let reponse = task.response as? HTTPURLResponse
+    if let reponseData = reponseData {
+      reponseData(data, reponse, error)
+    }
+    if let reponseJSON = reponseJSON {
+      do {
+        let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+        reponseJSON(json, reponse, error)
+      }catch {
+        reponseJSON(nil, reponse, MCError.jsonSerializationFailed)
+      }
+    }
   }
 }
+
+//class SessionDelegate: NSObject, URLSessionTaskDelegate {
+//  func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+//    
+//  }
+//}
 
