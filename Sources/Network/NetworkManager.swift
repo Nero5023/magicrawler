@@ -20,13 +20,21 @@ open class NetworkManger {
   init() {
     self.delegate = DataTaskDelegate()
     self.session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
-    operationQueue.maxConcurrentOperationCount = Int.max
+    operationQueue.maxConcurrentOperationCount = 50
   }
   
   func request(_ urlRequest: RequestConvertible) {
-    let task = self.session.dataTask(with: try! urlRequest.asURLRequest())
-    let operation = NetworkOperation(task)
-    operationQueue.addOperation(operation)
+//    let task = self.session.dataTask(with: try! urlRequest.asURLRequest())
+    let task = URLSession.shared.dataTask(with: try! urlRequest.asURLRequest()) { data, reponse, error in
+      print(data)
+      print("---")
+      
+      print((reponse as? HTTPURLResponse)?.statusCode) 
+      
+    }
+    task.resume()
+//    let operation = NetworkOperation(task)
+//    operationQueue.addOperation(operation)
   }
   
   deinit {
